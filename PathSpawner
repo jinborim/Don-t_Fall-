@@ -1,0 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PathSpawner : MonoBehaviour
+{
+  public GameObject floorPrefab;  // 복사해서 배치할 발판 
+  public GameObjecr pointPrefab;  // 복사해서 배치할 아이템
+  private Vector3 lastPos;        // 마지막으로 생성된 발판 위치 
+
+  public int itemPoint = 20; // 아이템이 나올 확률
+
+  void Start()
+  {
+    lastPos = floorPrefab.trsnform.position;
+
+    for(int i = 0; i < 100; i++){
+    SpawnFloor();
+  }
+}
+  public void SpawnFloor()
+{
+  // 0또는 1중 하나를 랜덤으로 선택
+  int rand = Random.Range(0, 2);
+  Vector3 spawnPos = Vector3.zero;
+
+  if (rand == 0) spawnPos = Vector3.right;   // 오른쪽
+        else spawnPos = Vector3.forward;           // 앞쪽
+        
+        lastPos += spawnPos; // 발판 크기가 1인 경우
+        GameObject newFloor = Instantiate(floorPrefab, lastPos, Quaternion.identity);
+
+        //랜덤 확률로 아이템 생성
+        if(Random.Range(0, 101) <= itemPoint)
+        {
+            SpawnItem(newFloor);
+        }
+    }
+
+    // 아이템을 소환하는 함수
+    void SpawnItem(GameObject floor)
+    {
+        //발판의 중심에서 위로 1.0만큼 띄운 위치 계산
+        Vector3 itemPos = floor.transform.position + new Vector3(0, 1.0f, 0);
+
+        // 아이템 생성
+        GameObject item = Instantiate(pointPrefab, itemPos, Quaternion.identity);
+
+        //발판이 사라질 때 같이 사라지도록 아이템을 발판의 자식으로 설정
+        item.transform.SetParent(floor.transform);
+    }
+}
+
