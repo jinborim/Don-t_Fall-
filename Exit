@@ -1,0 +1,17 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Exit : MonoBehaviour
+{
+  /**
+  *  게임을 종료하는 함수
+  **/
+    public void ExitApp()
+    {
+
+        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();
+        Debug.Log("게임이 종료되었습니다.");
+    }
+}
